@@ -29,7 +29,7 @@ class Venta(models.Model):
     total = models.FloatField(default=0)
     
     def __str__(self):
-        return self.numfactura
+        return str(self.numfactura)
 
 class DetalleVenta(models.Model):        
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)

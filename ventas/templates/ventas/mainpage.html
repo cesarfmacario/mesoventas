@@ -1,17 +1,24 @@
-<html>
-    <head>
-        <title>Meso Ventas</title>
-    </head>
-    <body>
-        <div>
-            <h1><a href="">MesoVentas</a></h1>
-            <h2>Área de ventas - Universidad Mesoamericana</h3>
-        </div>
-
-        <div>
-            <h3>Productos</h3>
-            <p>Productos Meso Ventas</p>
-        </div>
-
-    </body>
-</html>
+{% extends 'ventas/base.html' %}
+ 
+{% block content %}
+    <table>
+        <tr>
+            <td><strong>Código</strong></td>
+            <td><strong>Producto</strong></td>
+            <td><strong>Precio de Venta</strong></td>
+            <td><strong>Existencias</strong></td>
+            <td><strong>Acciones</strong></td>
+            <td><strong> </strong></td>
+        </tr>
+        {% for producto in productos %}
+         <tr>
+            <td>{{producto.id}}</td>
+            <td>{{producto.nombre}}</td>
+            <td>Q. {{producto.precio}}</td>
+            <td>{{producto.existencias}}</td>
+            <td><a href = "#">Editar</a></td>
+            <td><a href = "#">Eliminar</a></td>
+         </tr>
+        {% endfor %}
+    </table> 
+{% endblock %}

@@ -1,0 +1,36 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <title>MesoVentas</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+        <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
+        <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        <link rel="stylesheet" href="{% static 'css/tabla.css' %}">
+        <script type="text/javascript">
+            function mensaje() {
+                var msg = 'Hola';
+                //alert(msg);
+            }
+        </script>
+    </head>
+    <body>
+        
+        <ul class="nav">
+            <div class="logo">
+                <a href="/">MesoVentas</a>
+                <h4>Área de ventas - Universidad Mesoamericana</h4>
+            </div>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/productos">Productos</a></li>
+            <li><a href="/clientes">Clientes</a></li>
+            <li><a href="/ventas">Ventas</a></li>
+            <li><a href="/admin">Administración</a></li>
+            <li>{{username}} - <a href="/logout">Logout</a></li>
+        </ul>
+        
+        {% block content %}
+        {% endblock %}
+
+    </body>
+</html>

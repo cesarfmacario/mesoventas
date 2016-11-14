@@ -1,14 +1,21 @@
-{% extends 'ventas/base.html' %}
- 
+{% extends 'ventas/header-login.html' %}
 {% block content %}
-    <div class="login-page">
-        <div class="form">
-            <form class="login-form" action="">
-                <input type="text" placeholder="Escribe aquí tu usuario"/>
-                <input type="password" placeholder="Escribe aquí tu contraseña"/>
-                <button>INGRESAR</button>
-            </form>
-        </div>
-    </div>
-{% endblock %}
 
+<br /><br />
+<h1 class="titulo1">Necesitas acceder para utilizar MesoVentas</h1><br /><br>
+<div class="module form-module">
+  <div class="toggle">
+  </div>
+        <div class="form">
+        <h2>Ingresar a MesoVentas</h2>
+        <form method="post" onsubmit="return mensaje()">
+            {% csrf_token %}
+            <input type="text" placeholder="Aquí va tu usuario!" autofocus id="username" name = "username"/>
+            <input type="password" placeholder="Aquí va tu contraseña!" id="password" name = "password"/>
+            <input type="submit" value="Ingresar ahora!" class="button"/>
+        </form>
+            </div>
+  <div class="cta"><a href="/signup">Aún no estoy registrado</a></div>
+</div>
+      
+{% endblock %}

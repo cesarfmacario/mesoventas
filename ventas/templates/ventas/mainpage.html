@@ -1,24 +1,38 @@
-{% extends 'ventas/base.html' %}
+{% extends 'ventas/header-main.html' %}
  
 {% block content %}
-    <table>
-        <tr>
-            <td><strong>Código</strong></td>
-            <td><strong>Producto</strong></td>
-            <td><strong>Precio de Venta</strong></td>
-            <td><strong>Existencias</strong></td>
-            <td><strong>Acciones</strong></td>
-            <td><strong> </strong></td>
-        </tr>
+
+<ul class="menu">
+    <li><a href="/productos/nuevo"><input type="button" class="boton" value="+ Agregar producto"  /></a></li>
+    <li><a href="/clientes/nuevo"><input type="button" class="boton" value="+ Agregar clientes"  /></a></li>
+    <li><a href="/ventas/nuevo"><input type="button" class="boton" value="+ Nueva venta"  /></a></li>
+</ul>
+<h1 class="titulo1">Tabla de productos</h1>
+<div class="tabla">  
+  <table id="keywords">
+    <thead>
+      <tr>
+        <th><span>Código</span></th>
+        <th><span>Producto</span></th>
+        <th><span>Precio de venta</span></th>
+        <th><span>Stock</span></th>
+        <th><span>Acciones</span></th>
+        <th><span> </span></th>
+      </tr>
+    </thead>
+    <tbody>
         {% for producto in productos %}
-         <tr>
+            <tr>
             <td>{{producto.id}}</td>
-            <td>{{producto.nombre}}</td>
+            <td class="lalign">{{producto.nombre}}</td>
             <td>Q. {{producto.precio}}</td>
             <td>{{producto.existencias}}</td>
             <td><a href = "#">Editar</a></td>
             <td><a href = "#">Eliminar</a></td>
-         </tr>
+            </tr>
         {% endfor %}
-    </table> 
+    </tbody>
+  </table>
+ </div> 
+
 {% endblock %}

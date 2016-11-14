@@ -86,6 +86,10 @@ h1 {
   text-align: center;
   padding: 15px 10px;
 }
+#keywords tbody tr td a{
+  text-decoration: none;
+    color: #0a7e1c;
+}
 #keywords tbody tr td.lalign {
   text-align: left;
 }

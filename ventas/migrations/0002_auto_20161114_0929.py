@@ -7,10 +7,15 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ventas', '0002_auto_20161111_0932'),
+        ('ventas', '0001_initial'),
     ]
 
     operations = [
+        migrations.RenameField(
+            model_name='venta',
+            old_name='idcliente',
+            new_name='cliente',
+        ),
         migrations.AddField(
             model_name='venta',
             name='total',

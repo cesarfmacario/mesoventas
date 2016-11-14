@@ -27,7 +27,8 @@ class Venta(models.Model):
     fecha = models.DateTimeField(default=timezone.now)
     productos = models.ManyToManyField(Producto, through='DetalleVenta')
     total = models.FloatField(default=0)
-    
+    usuario = models.ForeignKey('auth.User')
+
     def __str__(self):
         return str(self.numfactura)
 

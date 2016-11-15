@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from .models import Cliente, Venta, Producto, VentaAdmin, ProductoAdmin, DetalleVenta
 from ventas.forms import ProductoForm, ClienteForm
 from django.shortcuts import redirect
+from django.utils import timezone
 
 def login(request):
     if request.user.is_authenticated():
@@ -64,14 +65,21 @@ def clientes(request):
     else:
         clientes = Cliente.objects.all()
         return render(request, 'ventas/clientes.html', {'clientes':clientes, 'username':request.user.username})
-    
+
+def ventas(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/")
+    else:
+        ventas = Venta.objects.all()
+        return render(request, 'ventas/ventas.html', {'ventas':ventas, 'username':request.user.username})
+
 def producto_nuevo(request):
     if request.POST:
         form = ProductoForm(request.POST)
         if form.is_valid():
             producto = form.save(commit=False)
             producto.save()
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect("/productos")
     else:
         form = ProductoForm()
     return render(request, 'ventas/producto_edit.html', {'form':form, 'username':request.user.username})
@@ -83,7 +91,7 @@ def producto_editar(request, pk):
         if form.is_valid():
             producto = form.save(commit=False)
             producto.save()
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect("/productos")
     else:
         form = ProductoForm(instance=producto)
     return render(request, 'ventas/producto_edit.html', {'form':form, 'username':request.user.username})
@@ -94,7 +102,7 @@ def cliente_nuevo(request):
         if form.is_valid():
             cliente = form.save(commit=False)
             cliente.save()
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect("/clientes")
     else:
         form = ClienteForm()
     return render(request, 'ventas/cliente_edit.html', {'form':form, 'username':request.user.username})
@@ -110,3 +118,19 @@ def cliente_editar(request, pk):
     else:
         form = ClienteForm(instance=cliente)
     return render(request, 'ventas/cliente_edit.html', {'form':form, 'username':request.user.username})
+
+def ventas_nuevo(request):
+    if request.POST:
+        return HttpResponse("post recibido")
+    else:
+        clientes = Cliente.objects.all()
+        productos = Producto.objects.all()
+        ventas = Venta.objects.all()
+        numfact = len(ventas) + 1
+        fecha = timezone.now
+    return render(request, 'ventas/ventas_edit.html', {'clientes':clientes,'productos':productos, 'fecha':fecha, 'numfact':numfact, 'username':request.user.username})
+    
+def ventas_editar(request, pk):
+    return render(request, 'ventas/ventas_edit.html', { 'username':request.user.username})
+
+    

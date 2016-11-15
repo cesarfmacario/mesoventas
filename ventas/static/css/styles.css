@@ -9,17 +9,46 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.combobox {
+    border: 1px solid #20b243;
+    font-family: 'RobotoDraft', 'Roboto', sans-serif;
+    width: 225px;
+    overflow: hidden;
+    background: #fff;
+}
+
 .menu {
-    background: #7c7c7c;
+    background: #525252;
     color: #000;
     list-style: none;
     text-align: left;
     padding: 20px 20px;
+    text-align: center;
+}
+
+.menu > h2 {
+    font-size: 27px;
+    color: #fff;
 }
 
 .menu > li {
     display: inline-block;
-    padding-right: 5px;
+    padding-right: 50px;
+    color: #fff;
+}
+
+
+.menu2 {
+    color: #000;
+    list-style: none;
+    text-align: left;
+    padding: 10px 10px;
+    text-align: center;
+}
+
+.menu2 > h2 {
+    font-size: 20px;
+    padding-bottom: 10px;
 }
 
 .boton {
@@ -36,7 +65,15 @@ body {
     color: #29f55a;
 }
 
-
+.encabezado {
+    background: #3a3c3a;
+    color: #fff;
+    list-style: none;
+    text-align: right;
+    padding: 25px 0 25px 0;
+    display: inline-block;
+    padding-right: 35px;
+}
 
 .nav {
     background: #3a3c3a;
@@ -182,7 +219,7 @@ body {
 .button {
   cursor: pointer;
   background: #10aa34;
-  width: 100%;
+  width: 50%;
   border: 0;
   padding: 10px 15px;
   color: #ffffff;

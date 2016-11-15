@@ -1,0 +1,36 @@
+{% extends 'ventas/header-main.html' %}
+ 
+{% block content %}
+
+<ul class="menu">
+    <li><a href="/ventas/nuevo"><input type="button" class="boton" value="+ Nueva venta"  /></a></li>
+</ul>
+<h1 class="titulo1">Área de ventas</h1>
+<div class="tabla">  
+  <table id="keywords">
+    <thead>
+      <tr>
+        <th><span>No. Factura</span></th>
+        <th><span>Cliente</span></th>
+        <th><span>Fecha</span></th>
+        <th><span>Total</span></th>
+        <th><span>Usuario</span></th>
+        <th><span>Acciones</span></th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for venta in ventas %}
+            <tr>
+            <td>{{venta.numfactura}}</td>
+            <td class="lalign">{{venta.cliente}}</td>
+            <td>{{venta.fecha}}</td>
+            <td>Q. {{venta.total}}</td>
+            <td>{{venta.usuario}}</td>
+            <td><a href = "{% url 'ventas_editar' pk=venta.pk %}">Ver detalles</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+ </div> 
+
+{% endblock %}

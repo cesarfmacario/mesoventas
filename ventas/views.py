@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
-from .models import Cliente, Venta, Producto, VentaAdmin, ProductoAdmin, DetalleVenta
+from ventas.models import Cliente, Venta, Producto, VentaAdmin, ProductoAdmin, DetalleVenta
 from ventas.forms import ProductoForm, ClienteForm
 from django.shortcuts import redirect
 from django.utils import timezone
@@ -70,67 +70,93 @@ def ventas(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/")
     else:
-        ventas = Venta.objects.all()
+        #ventas = Venta.objects.all()
+        ventas = Venta.objects.order_by('-numfactura')
         return render(request, 'ventas/ventas.html', {'ventas':ventas, 'username':request.user.username})
 
 def producto_nuevo(request):
-    if request.POST:
-        form = ProductoForm(request.POST)
-        if form.is_valid():
-            producto = form.save(commit=False)
-            producto.save()
-        return HttpResponseRedirect("/productos")
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/")
     else:
-        form = ProductoForm()
-    return render(request, 'ventas/producto_edit.html', {'form':form, 'username':request.user.username})
+        if request.POST:
+            form = ProductoForm(request.POST)
+            if form.is_valid():
+                producto = form.save(commit=False)
+                producto.save()
+            return HttpResponseRedirect("/productos")
+        else:
+            form = ProductoForm()
+        return render(request, 'ventas/producto_edit.html', {'form':form, 'username':request.user.username})
 
 def producto_editar(request, pk):
-    producto = get_object_or_404(Producto, pk=pk)
-    if request.POST:
-        form = ProductoForm(request.POST, instance=producto)
-        if form.is_valid():
-            producto = form.save(commit=False)
-            producto.save()
-        return HttpResponseRedirect("/productos")
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/")
     else:
-        form = ProductoForm(instance=producto)
-    return render(request, 'ventas/producto_edit.html', {'form':form, 'username':request.user.username})
+        producto = get_object_or_404(Producto, pk=pk)
+        if request.POST:
+            form = ProductoForm(request.POST, instance=producto)
+            if form.is_valid():
+                producto = form.save(commit=False)
+                producto.save()
+            return HttpResponseRedirect("/productos")
+        else:
+            form = ProductoForm(instance=producto)
+        return render(request, 'ventas/producto_edit.html', {'form':form, 'username':request.user.username})
 
 def cliente_nuevo(request):
-    if request.POST:
-        form = ClienteForm(request.POST)
-        if form.is_valid():
-            cliente = form.save(commit=False)
-            cliente.save()
-        return HttpResponseRedirect("/clientes")
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/")
     else:
-        form = ClienteForm()
-    return render(request, 'ventas/cliente_edit.html', {'form':form, 'username':request.user.username})
+        if request.POST:
+            form = ClienteForm(request.POST)
+            if form.is_valid():
+                cliente = form.save(commit=False)
+                cliente.save()
+            return HttpResponseRedirect("/clientes")
+        else:
+            form = ClienteForm()
+        return render(request, 'ventas/cliente_edit.html', {'form':form, 'username':request.user.username})
     
 def cliente_editar(request, pk):
-    cliente = get_object_or_404(Cliente, pk=pk)
-    if request.POST:
-        form = ClienteForm(request.POST, instance=cliente)
-        if form.is_valid():
-            cliente = form.save(commit=False)
-            cliente.save()
-        return HttpResponseRedirect("/clientes")
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/")
     else:
-        form = ClienteForm(instance=cliente)
-    return render(request, 'ventas/cliente_edit.html', {'form':form, 'username':request.user.username})
+        cliente = get_object_or_404(Cliente, pk=pk)
+        if request.POST:
+            form = ClienteForm(request.POST, instance=cliente)
+            if form.is_valid():
+                cliente = form.save(commit=False)
+                cliente.save()
+            return HttpResponseRedirect("/clientes")
+        else:
+            form = ClienteForm(instance=cliente)
+        return render(request, 'ventas/cliente_edit.html', {'form':form, 'username':request.user.username})
 
 def ventas_nuevo(request):
-    if request.POST:
-        return HttpResponse("post recibido")
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/")
     else:
-        clientes = Cliente.objects.all()
-        productos = Producto.objects.all()
-        ventas = Venta.objects.all()
-        numfact = len(ventas) + 1
-        fecha = timezone.now
-    return render(request, 'ventas/ventas_edit.html', {'clientes':clientes,'productos':productos, 'fecha':fecha, 'numfact':numfact, 'username':request.user.username})
+        if request.POST:
+            return HttpResponse("post recibido")
+        else:
+            clientes = Cliente.objects.all()
+            productos = Producto.objects.all()
+            ventas = Venta.objects.all()
+            numfact = len(ventas) + 1
+            fecha = timezone.now
+        return render(request, 'ventas/ventas_nuevo.html', {'clientes':clientes,'productos':productos, 'fecha':fecha, 'numfact':numfact, 'username':request.user.username})
     
-def ventas_editar(request, pk):
-    return render(request, 'ventas/ventas_edit.html', { 'username':request.user.username})
+def ventas_detalle(request, pk):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/")
+    else:
+        venta = get_object_or_404(Venta, pk=pk)
+        detalles = DetalleVenta.objects.filter(venta=venta)
+        prunits = []   #   PRECIOS UNITARIOS DEBIDO A QUE UNA ACTUALIZACION DE PRODUCTOS AFECTARÍA ESTE CAMPO
+        for x in range(0, len(detalles)):
+            prunits.append(detalles[x].totaldetalle / detalles[x].cantidadvendida)
+        longdetalles = len(detalles)
+        info = {'venta':venta, 'detalles':detalles, 'username':request.user.username, 'prunits':prunits, 'longdet':longdetalles}
+        return render(request, 'ventas/ventas_detalle.html', info)
 
     

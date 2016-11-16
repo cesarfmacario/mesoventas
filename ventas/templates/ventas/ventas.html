@@ -26,7 +26,7 @@
             <td>{{venta.fecha}}</td>
             <td>Q. {{venta.total}}</td>
             <td>{{venta.usuario}}</td>
-            <td><a href = "{% url 'ventas_editar' pk=venta.pk %}">Ver detalles</a></td>
+            <td><a href = "{% url 'ventas_detalle' pk=venta.pk %}">Ver detalles</a></td>
             </tr>
         {% endfor %}
     </tbody>

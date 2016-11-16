@@ -14,7 +14,7 @@ urlpatterns = [
         url(r'^ventas/nuevo/$', views.ventas_nuevo, name='ventas_nuevo'),
         url(r'^productos/editar/(?P<pk>[0-9]+)/$', views.producto_editar, name='producto_editar'),    
         url(r'^clientes/editar/(?P<pk>[0-9]+)/$', views.cliente_editar, name='cliente_editar'),
-        url(r'^ventas/editar/(?P<pk>[0-9]+)/$', views.ventas_editar, name='ventas_editar'),
+        url(r'^ventas/(?P<pk>[0-9]+)/$', views.ventas_detalle, name='ventas_detalle'),
         #url(r'^producto/(?P<pk>[0-9]+)/$', views.mainpage),
         #url(r'^signup$', views.signup),
     ]

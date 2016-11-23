@@ -1,0 +1,81 @@
+{% extends 'ventas/header-main.html' %}
+
+{% block content %}
+
+    <div class="moduloventas">
+        <form>
+            {% csrf_token %}
+            
+            <ul class="menu">
+                <h2>Factura No. {{numfact}}</h2><br />
+                <li>Cliente:
+                    <select class="combobox">
+                        {% for cliente in clientes %}
+                            <option value="{{cliente.id}}">{{cliente.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                </li>
+                <li>Fecha: <strong>{{fecha}}</strong></li>
+                <li>Usuario: <strong>{{username}}</strong></li>
+            </ul>
+            
+            <div class="menu2">
+                <div class="tabla">
+                    <table id="keywords">
+                        <thead>
+                            <tr>
+                                <th><span>No. Producto</span></th>
+                                <th><span>Producto</span></th>
+                                <th><span>Cantidad</span></th>
+                                <th><span>Precio Unitario</span></th>
+                                <th><span>Subtotal</span></th>
+                                <th><span>Acciones</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="idprod"></td>
+                                <td class="lalign">
+                                    <select class="combobox" name="seleccion" id = "seleccion">
+                                        {% for producto in productos %}
+                                            <option value="{{producto.id}}">{{producto.nombre}}</option>
+                                        {% endfor %}
+                                    </select>   
+                                </td>
+                                <td>
+                                    <input type="number" placeholder="Cantidad" id="cantvend" value="1"/>
+                                </td>
+                                <td id="prunit"></td>
+                                <td id="subt"></td>
+                                <td><input type="button" class="boton" value="Calcular" onclick="capturar()" /></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="lalign"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>+ Agregar otro</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>        
+                <h2>Monto a pagar:<strong> Q. {{venta.total}}</strong></h2>
+                </form>
+            
+                <div class="acciones">
+                    <br /><input type="button" value="Facturar ahora!" class="boton"/>
+                    <select class="combobox">
+                        {% for items in cantvend %}
+                            <option value="{{items}}">{{items}}</option>
+                        {% endfor %}
+                    </select>   
+                    <select class="combobox">
+                        {% for items in prods %}
+                            <option value="{{items}}">{{items}}</option>
+                        {% endfor %}
+                    </select>   
+                </div>
+            </div>
+    </div>
+{% endblock %}

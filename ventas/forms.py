@@ -16,13 +16,10 @@ class ClienteForm(forms.ModelForm):
 class VentaForm(forms.ModelForm):
     class Meta:
         model = Venta
-        fields = ('cliente', 'total', 'productos',)
+        fields = ('cliente', 'productos',)
         
-def __init__ (self, *args, **kwargs):
-        super(VentaForm, self).__init__(*args, **kwargs)
-        self.fields["productos"].widget = forms.widgets.Select()
-        name = forms.NumberInput(attrs={'size': 10, 'title': 'Cantidad',})
-        name.render('name')
-        self.fields["productos"].widget = forms.CharField()
-        self.fields["productos"].help_text = "Ingrese los productos que desea comprar"
-        self.fields["productos"].queryset = Producto.objects.all()
+        def __init__ (self, *args, **kwargs):
+            super(VentaForm, self).__init__(*args, **kwargs)
+            self.fields["productos"].widget = forms.widgets.CheckboxSelectMultiple()
+            self.fields["productos"].help_text = "Ingrese productos: "
+            self.fields["productos"].queryset = Producto.objects.all()

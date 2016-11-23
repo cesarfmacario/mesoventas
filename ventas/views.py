@@ -3,7 +3,7 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 from ventas.models import Cliente, Venta, Producto, VentaAdmin, ProductoAdmin, DetalleVenta
-from ventas.forms import ProductoForm, ClienteForm
+from ventas.forms import ProductoForm, ClienteForm, VentaForm
 from django.shortcuts import redirect
 from django.utils import timezone
 
@@ -50,21 +50,21 @@ def mainpage(request):
         return HttpResponseRedirect("/login")
     else:
         productos = Producto.objects.all()
-        return render(request, 'ventas/mainpage.html', {'productos':productos, 'username':request.user.username})
+        return render(request, 'ventas/mainpage.html', {'productos':productos, 'username':request.user})
 
 def productos(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/")
     else:
         productos = Producto.objects.all()
-        return render(request, 'ventas/productos.html', {'productos':productos, 'username':request.user.username})
+        return render(request, 'ventas/productos.html', {'productos':productos, 'username':request.user})
     
 def clientes(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/")
     else:
         clientes = Cliente.objects.all()
-        return render(request, 'ventas/clientes.html', {'clientes':clientes, 'username':request.user.username})
+        return render(request, 'ventas/clientes.html', {'clientes':clientes, 'username':request.user})
 
 def ventas(request):
     if not request.user.is_authenticated():
@@ -72,7 +72,7 @@ def ventas(request):
     else:
         #ventas = Venta.objects.all()
         ventas = Venta.objects.order_by('-numfactura')
-        return render(request, 'ventas/ventas.html', {'ventas':ventas, 'username':request.user.username})
+        return render(request, 'ventas/ventas.html', {'ventas':ventas, 'username':request.user})
 
 def producto_nuevo(request):
     if not request.user.is_authenticated():
@@ -86,7 +86,7 @@ def producto_nuevo(request):
             return HttpResponseRedirect("/productos")
         else:
             form = ProductoForm()
-        return render(request, 'ventas/producto_edit.html', {'form':form, 'username':request.user.username})
+        return render(request, 'ventas/producto_edit.html', {'form':form, 'username':request.user})
 
 def producto_editar(request, pk):
     if not request.user.is_authenticated():
@@ -101,7 +101,7 @@ def producto_editar(request, pk):
             return HttpResponseRedirect("/productos")
         else:
             form = ProductoForm(instance=producto)
-        return render(request, 'ventas/producto_edit.html', {'form':form, 'username':request.user.username})
+        return render(request, 'ventas/producto_edit.html', {'form':form, 'username':request.user})
 
 def cliente_nuevo(request):
     if not request.user.is_authenticated():
@@ -115,7 +115,7 @@ def cliente_nuevo(request):
             return HttpResponseRedirect("/clientes")
         else:
             form = ClienteForm()
-        return render(request, 'ventas/cliente_edit.html', {'form':form, 'username':request.user.username})
+        return render(request, 'ventas/cliente_edit.html', {'form':form, 'username':request.user})
     
 def cliente_editar(request, pk):
     if not request.user.is_authenticated():
@@ -130,9 +130,42 @@ def cliente_editar(request, pk):
             return HttpResponseRedirect("/clientes")
         else:
             form = ClienteForm(instance=cliente)
-        return render(request, 'ventas/cliente_edit.html', {'form':form, 'username':request.user.username})
-
+        return render(request, 'ventas/cliente_edit.html', {'form':form, 'username':request.user})
+    
 def ventas_nuevo(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/")
+    else:
+        if request.POST:
+            form = VentaForm(request.POST)
+            if form.is_valid():
+                #cl = 
+                ventanueva = Venta.objects.create(cliente=form.cleaned_data['cliente'], usuario=request.user)
+                
+                total = 0
+                for producto_id in request.POST.getlist('productos'):
+                    prodselect = Producto.objects.filter(id=int(producto_id))[0]
+                    prodselect
+                    exists = prodselect.existencias
+                    prodselect.existencias = exists - 1
+                    prodselect.save()
+                    totdet = prodselect.precio
+                    total = total + totdet
+                    detalle = DetalleVenta(venta_id=ventanueva.numfactura, producto_id=producto_id, totaldetalle=totdet)
+                    detalle.save()
+                
+                ventanueva.total = total
+                ventanueva.save()
+                
+            return HttpResponseRedirect("/ventas")
+        else:
+            form = VentaForm()
+            ventas = Venta.objects.all()
+            ventas = Venta.objects.all()[len(ventas) - 1]
+            numfact = ventas.numfactura + 1
+            return render(request, 'ventas/ventas_nuevo.html', {'form':form, 'fecha':timezone.now, 'numfact':numfact, 'username':request.user})
+
+def ventas_nuev(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/")
     else:
@@ -144,7 +177,8 @@ def ventas_nuevo(request):
             ventas = Venta.objects.all()
             numfact = len(ventas) + 1
             fecha = timezone.now
-        return render(request, 'ventas/ventas_nuevo.html', {'clientes':clientes,'productos':productos, 'fecha':fecha, 'numfact':numfact, 'username':request.user.username})
+            info =  {'clientes':clientes,'productos':productos, 'fecha':fecha, 'numfact':numfact, 'username':request.user, 'prods':prods, 'cantvend':cantvend}
+            return render(request, 'ventas/ventanueva.html', info)
     
 def ventas_detalle(request, pk):
     if not request.user.is_authenticated():
@@ -156,7 +190,22 @@ def ventas_detalle(request, pk):
         for x in range(0, len(detalles)):
             prunits.append(detalles[x].totaldetalle / detalles[x].cantidadvendida)
         longdetalles = len(detalles)
-        info = {'venta':venta, 'detalles':detalles, 'username':request.user.username, 'prunits':prunits, 'longdet':longdetalles}
+        info = {'venta':venta, 'detalles':detalles, 'username':request.user, 'prunits':prunits, 'longdet':longdetalles}
         return render(request, 'ventas/ventas_detalle.html', info)
 
+def producto_eliminar(request, pk):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/")
+    else:
+        producto = get_object_or_404(Producto, pk=pk)
+        producto.delete()
+        return HttpResponseRedirect("/productos")
+    
+def cliente_eliminar(request, pk):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/")
+    else:
+        cliente = get_object_or_404(Cliente, pk=pk)
+        cliente.delete()
+        return HttpResponseRedirect("/clientes")
     

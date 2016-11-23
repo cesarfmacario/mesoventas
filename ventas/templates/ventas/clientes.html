@@ -14,7 +14,7 @@
         <th><span>Cliente</span></th>
         <th><span>NIT</span></th>
         <th><span>Dirección</span></th>
-        <th><span>Acciones</span></th>
+        {% if username.is_superuser %}<th><span>Acciones</span></th><th></th>{% endif %}
       </tr>
     </thead>
     <tbody>
@@ -24,7 +24,14 @@
             <td class="lalign">{{cliente.nombre}}</td>
             <td>{{cliente.nit}}</td>
             <td>{{cliente.direccion}}</td>
-            <td><a href = "{% url 'cliente_editar' pk=cliente.pk %}">Editar</a></td>
+            {% if username.is_superuser %}
+            <td>
+                <a href = "{% url 'cliente_editar' pk=cliente.pk %}">Editar</a>
+            </td>
+            <td>
+                <a href = "{% url 'cliente_eliminar' pk=cliente.pk %}">Eliminar</a>    
+            </td>
+            {% endif %}
             </tr>
         {% endfor %}
     </tbody>

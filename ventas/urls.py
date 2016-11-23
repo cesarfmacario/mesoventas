@@ -15,6 +15,10 @@ urlpatterns = [
         url(r'^productos/editar/(?P<pk>[0-9]+)/$', views.producto_editar, name='producto_editar'),    
         url(r'^clientes/editar/(?P<pk>[0-9]+)/$', views.cliente_editar, name='cliente_editar'),
         url(r'^ventas/(?P<pk>[0-9]+)/$', views.ventas_detalle, name='ventas_detalle'),
+        url(r'^productos/eliminar/(?P<pk>[0-9]+)/$', views.producto_eliminar, name='producto_eliminar'),   
+        url(r'^clientes/eliminar/(?P<pk>[0-9]+)/$', views.cliente_eliminar, name='cliente_eliminar'),   
         #url(r'^producto/(?P<pk>[0-9]+)/$', views.mainpage),
         #url(r'^signup$', views.signup),
+    
+    
     ]

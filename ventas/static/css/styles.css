@@ -9,12 +9,14 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+
 .combobox {
     border: 1px solid #20b243;
     font-family: 'RobotoDraft', 'Roboto', sans-serif;
     width: 225px;
     overflow: hidden;
     background: #fff;
+    color: #000;
 }
 
 .menu {
@@ -23,6 +25,25 @@ body {
     list-style: none;
     padding: 20px 20px;
     text-align: center;
+}
+
+.menu > p {
+    padding: 20px 20px;
+    color: #fff
+}
+
+.menu > p > label {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.menu > p > select {
+    width: 250px;
+}
+
+#id_productos {
+    height: 300px;
+    font-family: 'RobotoDraft', 'Roboto', sans-serif;
 }
 
 .menu > h2 {

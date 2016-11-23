@@ -16,7 +16,12 @@
         <th><span>Producto</span></th>
         <th><span>Precio de venta</span></th>
         <th><span>Stock</span></th>
-        <th><span>Acciones</span></th>
+        {% if username.is_superuser %}
+        <th>    
+            <span>Acciones</span>    
+        </th>
+        <th></th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -26,7 +31,14 @@
             <td class="lalign">{{producto.nombre}}</td>
             <td>Q. {{producto.precio}}</td>
             <td>{{producto.existencias}}</td>
-            <td><a href = "{% url 'producto_editar' pk=producto.pk %}">Editar</a></td>
+            {% if username.is_superuser %}
+            <td>
+                <a href = "{% url 'producto_editar' pk=producto.pk %}">Editar</a>    
+            </td>
+            <td>
+                <a href = "{% url 'producto_eliminar' pk=producto.pk %}">Eliminar</a>    
+            </td>
+            {% endif %}
             </tr>
         {% endfor %}
     </tbody>

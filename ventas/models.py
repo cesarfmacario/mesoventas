@@ -25,17 +25,18 @@ class Venta(models.Model):
     numfactura = models.AutoField(primary_key=True)
     cliente = models.ForeignKey(Cliente)
     fecha = models.DateTimeField(default=timezone.now)
-    productos = models.ManyToManyField(Producto, through='DetalleVenta')
     total = models.FloatField(default=0)
     usuario = models.ForeignKey('auth.User')
 
+    productos = models.ManyToManyField(Producto, through='DetalleVenta')
+    
     def __str__(self):
         return str(self.numfactura)
 
 class DetalleVenta(models.Model):        
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    cantidadvendida = models.IntegerField(default = 0)
+    cantidadvendida = models.IntegerField(default = 1)
     totaldetalle = models.FloatField(default=0)
     
 class DetalleVentaInLine(admin.TabularInline):
